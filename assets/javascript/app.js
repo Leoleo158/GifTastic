@@ -2,7 +2,7 @@ $(document).ready(function() {
 
 // var and array creation
 var topics = ["Poe", "Obi-Wan Kenobi", "Anakin", "Fives", "Captain Rex", "Droids" , "X-Wing", "Darth Vader", "First Order"]
-var results;
+var gifResults;
 
 
 
@@ -46,6 +46,17 @@ function gifPull(){
     var characterString = characterName.split().join();
     //call giphyURL
     var giphyURL = "api.giphy.com/v1/gifs/search?api_key=tFIrfDgnTZVlaQOQdtqFaZ2q2WuLkeg1";
+    
+    //links API key with ajax so we can get a response with data
+    $.ajax ({
+        URL: giphyURL,
+        method: "GET"
+    }).done(function(response){
+        //displays the results from giphy server
+        gifResults = response.data;
+        //create vars to pull rating and gif data and diplay it to gifs div
+        
+    })
 }
 // Use document on click function to apply function for elements AFTER the page has loaded
 
