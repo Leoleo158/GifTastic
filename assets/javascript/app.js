@@ -4,7 +4,7 @@ $(document).ready(function() {
 var topics = ["Poe", "Obi-Wan Kenobi", "Anakin", "Fives", "Captain Rex", "Droids" , "X-Wing", "Darth Vader", "First Order"]
 var gifResults;
 
-
+// API "https://api.giphy.com/v1/gifs/search?q=api_key=knycUBcf7bb34RCBk950ZIfJKqS20sQb"
 
 //function to make buttons
 
@@ -45,22 +45,41 @@ function gifPull(){
     var characterName = $(this).attr('name');
     var characterString = characterName.split().join();
     //call giphyURL
-    var giphyURL = "api.giphy.com/v1/gifs/search?api_key=tFIrfDgnTZVlaQOQdtqFaZ2q2WuLkeg1";
+    var giphyURL = "https://api.giphy.com/v1/gifs/search?q=" + characterString + "&api_key=knycUBcf7bb34RCBk950ZIfJKqS20sQb&limit=10";
     
     //links API key with ajax so we can get a response with data
     $.ajax ({
         URL: giphyURL,
         method: "GET"
     }).done(function(response){
+        
         //displays the results from giphy server
         gifResults = response.data;
-        //create vars to pull rating and gif data and diplay it to gifs div
+        //create vars to pull rating and gif data and diplay it to gifs div also looks through results
+        $('gifs').empty();
+
+    //for loop to go through results data
+    for( var i = 0; i < gifResults; i++){
         
+        //creat a div for the character
+        var characterDiv = $('<div>')
+        //use p tag to diplay rating to the DOM and concatenate results
+        var ratingPar = $("<p> 'Rating: '</p>" + gifResults[i].results);
+        //create a var that will diplay the img on the DOM
+        var resultImage = $("<img>");
+
+        //add classes to the vars to show in html
+        characterDiv.addClass('character-info');
+        ratingPar.addClass('ratingParameter');
+        resultImage.addClass('image');
+        //shows the actual Rating: text
+        ratingPar.text("Rating: ");
+    }    
+
     })
 }
 // Use document on click function to apply function for elements AFTER the page has loaded
-
 // ANIMATE GIFS
-
+gifPull();
 
 });
