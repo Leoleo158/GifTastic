@@ -1,7 +1,7 @@
 $(document).ready(function() {
 
 // var and array creation
-var topics = ["Poe", "Obi-Wan Kenobi", "Anakin", "Fives", "Captain Rex", "Droids" , "X-Wing", "Darth Vader", "First Order"]
+var topics = ["Poe", "Obi-Wan Kenobi", "Anakin", "Fives", "Captain Rex", "Droids" , "X-Wing", "Darth Vader", "First Order"];
 var gifResults;
 
 // API "https://api.giphy.com/v1/gifs/search?q=api_key=knycUBcf7bb34RCBk950ZIfJKqS20sQb"
@@ -9,16 +9,16 @@ var gifResults;
 //function to make buttons
 
 function makeButtons(){
-    // $('#makeBtn').empty();
+    $('#got-buttons').empty();
 
     for(i = 0; i < topics.length; i++){
         var Btn = $('<button>');
 
         Btn.addClass('character-btn');
-        Btn.attr('name', topics[i]);
+        Btn.attr('data-name', topics[i]);
         Btn.text(topics[i]);
 
-        $('#makeBtn').append(Btn);
+        $('#got-buttons').append(Btn);
 
 
     }
@@ -26,14 +26,18 @@ function makeButtons(){
 
 // on-click event
 
-$('characterAdd').on('click', function(){
-    var character = $('input-text').val().trim();
+$('#characterAdd').on('click', function(){
+
+    event.preventDefault();
+
+    var character = $('#get-input').val().trim();
 
     //push new elements that the user adds into topics array
     topics.push(character);
+
+    $('#get-input').val('');
     
-    //call makeButtons function when characterAdd runs
-    makeButtons();
+   
     
 });
 //call function to make buttons
@@ -42,8 +46,8 @@ makeButtons();
 //FUNCTION FOR GRABBING GIPHY API CONTENT
 function gifPull(){
     //pull characterName
-    var characterName = $(this).attr('name');
-    var characterString = characterName.split().join();
+    var characterName = $(this).attr('data-name');
+    var characterString = characterName.split('').join("+");
     //call giphyURL
     var giphyURL = "https://api.giphy.com/v1/gifs/search?q=" + characterString + "&api_key=knycUBcf7bb34RCBk950ZIfJKqS20sQb&limit=10";
     
@@ -64,33 +68,31 @@ function gifPull(){
         
         //create vars to pull rating and gif data and diplay it to gifs div also looks through results
     //for loop to go through results data
-    for( var i = 0; i < gifResults; i++){
+    for( var i = 0; i < gifResults.length; i++){
         
         //creat a div for the character
         var characterDiv = $('<div>')
         //use p tag to diplay rating to the DOM and concatenate results
-        var ratingPar = $("<p class = 'gifRating'>").text( "Rating:" + gifResults[i].rating);
+        var ratingPar = $("<p class='gifRating'>").text( "Rating:" + gifResults[i].rating);
         //create a var that will diplay the img on the DOM
         var resultImage = $("<img>");
 
-        //add classes to the vars to show in html
-        characterDiv.addClass('character-info');
+       
         ratingPar.addClass('ratingParameter');
         
-        //shows the actual Rating: text
-        ratingPar.text("Rating: ");
-
+        
         //add class to resultsImage and tie in src and results data to show in the DOM
-        resultImage.addClass('image');
-         resultsImage.attr("src", results[i].images.fixed_height_still.url);
-        //initialize "still gif"
+        resultImage.addClass('gifs-image');
+         resultsImage.attr("src", gifResults[i].images.fixed_height_still.url);
+       
+         //initialize "still gif"
         resultsImage.attr('data-state', 'still');
         resultsImage.attr('data-position', i);
 
         //append the rating parameter and resultsImage to the DOM
+        characterDiv.addClass('single-gifs');
         characterDiv.append(ratingPar);
         characterDiv.append(resultImage);
-        characterDiv.addClass('single-gifs');
 
         //prepend gifs before the charaterDiv to show gif in that div
         $('#gifs').prepend(characterDiv);
@@ -101,5 +103,27 @@ function gifPull(){
 // Use document on click function to apply function for elements AFTER the page has loaded
 $(document).on('click' , gifPull);
 // ANIMATE GIFS
+
+function animate(){
+    var state = $(this).attr('data-state');
+
+    //To return a string
+    var position = $(this).attr('data-position'); 
+    
+    //change string to integer
+
+    position = parseInt(position);
+
+    //if/else statement to start animation of gif
+    if( state === 'still'){
+        $(this).attr('src', gifResults[position].images.fixed_height_still.url);
+        $(this).attr('data-state', 'animate');
+    } else {
+        $(this).attr('src', gifResults[position].images.fixed_height_still.url);
+        $(this).attr('src', 'still');
+    }
+};
+//document.ready 
+$(document).on('click', '.gifs-image', animate);
 
 });
