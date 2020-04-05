@@ -59,25 +59,31 @@ function gifPull(){
         console.log(giphyURL);
         //displays the results from giphy server
         gifResults = response.data;
-        //create vars to pull rating and gif data and diplay it to gifs div also looks through results
+        //empties old gif entries
         $('gifs').empty();
-
+        
+        //create vars to pull rating and gif data and diplay it to gifs div also looks through results
     //for loop to go through results data
     for( var i = 0; i < gifResults; i++){
         
         //creat a div for the character
         var characterDiv = $('<div>')
         //use p tag to diplay rating to the DOM and concatenate results
-        var ratingPar = $("<p> 'Rating: '</p>" + gifResults[i].results);
+        var ratingPar = $("<p class = 'gifRating'>").text( "Rating:" + gifResults[i].rating);
         //create a var that will diplay the img on the DOM
         var resultImage = $("<img>");
 
         //add classes to the vars to show in html
         characterDiv.addClass('character-info');
         ratingPar.addClass('ratingParameter');
-        resultImage.addClass('image');
+        
         //shows the actual Rating: text
         ratingPar.text("Rating: ");
+
+        //add class to resultsImage and tie in src and results data to show in the DOM
+        resultImage.addClass('image');
+         resultsImage.attr("src", results[i].images.fixed_height_still.url);
+        resultsImage.attr('data-position', i);
     }    
 
     })
