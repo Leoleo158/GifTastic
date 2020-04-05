@@ -53,6 +53,10 @@ function gifPull(){
         method: "GET"
     }).done(function(response){
         
+        //log to the console response and GiphyURL
+        console.log(response);
+
+        console.log(giphyURL);
         //displays the results from giphy server
         gifResults = response.data;
         //create vars to pull rating and gif data and diplay it to gifs div also looks through results
