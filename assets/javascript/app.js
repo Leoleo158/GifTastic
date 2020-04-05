@@ -83,13 +83,23 @@ function gifPull(){
         //add class to resultsImage and tie in src and results data to show in the DOM
         resultImage.addClass('image');
          resultsImage.attr("src", results[i].images.fixed_height_still.url);
+        //initialize "still gif"
+        resultsImage.attr('data-state', 'still');
         resultsImage.attr('data-position', i);
-    }    
 
-    })
+        //append the rating parameter and resultsImage to the DOM
+        characterDiv.append(ratingPar);
+        characterDiv.append(resultImage);
+        characterDiv.addClass('single-gifs');
+
+        //prepend gifs before the charaterDiv to show gif in that div
+        $('#gifs').prepend(characterDiv);
+    }; //ends the for loop    
+
+    }); //Ends AJAX
 }
 // Use document on click function to apply function for elements AFTER the page has loaded
+$(document).on('click' , gifPull);
 // ANIMATE GIFS
-gifPull();
 
 });
