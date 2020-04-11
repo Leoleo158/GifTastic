@@ -9,35 +9,42 @@ var gifResults;
 //function to make buttons
 
 function makeButtons(){
-    $('#got-buttons').empty();
+    $('#get-buttons').empty();
 
-    for(i = 0; i < topics.length; i++){
-        var Btn = $('<button>');
+    for (i = 0; i < topics.length; i++) {
+			
+        var b = $("<button>");
 
-        Btn.addClass('character-btn');
-        Btn.attr('data-name', topics[i]);
-        Btn.text(topics[i]);
+        b.addClass("character-btn");
+        b.attr("data-name", topics[i]);
+        b.text(topics[i]);
 
-        $('#got-buttons').append(Btn);
+        $("#get-buttons").append(b);
 
 
     }
 }
+makeButtons();
 
 // on-click event
 
-$('#characterAdd').on('click', function(){
+$(document).on('click', 'character-btn', function(){
+    var character = $(this).html(); 
+    console.log(car);
+    
+    var giphyURL = "https://api.giphy.com/v1/gifs/search?q=" + character + "&api_key=knycUBcf7bb34RCBk950ZIfJKqS20sQb&limit=10";
 
-    event.preventDefault();
+}
 
-    var character = $('#get-input').val().trim();
+event.preventDefault();
 
-    //push new elements that the user adds into topics array
-    topics.push(character);
+
+//push new elements that the user adds into topics array
+topics.push(character);
 
     $('#get-input').val('');
     
-   
+   makeButtons();
     
 });
 //call function to make buttons
@@ -47,9 +54,9 @@ makeButtons();
 function gifPull(){
     //pull characterName
     var characterName = $(this).attr('data-name');
+
     var characterString = characterName.split('').join("+");
     //call giphyURL
-    var giphyURL = "https://api.giphy.com/v1/gifs/search?q=" + characterString + "&api_key=knycUBcf7bb34RCBk950ZIfJKqS20sQb&limit=10";
     
     //links API key with ajax so we can get a response with data
     $.ajax ({
@@ -61,6 +68,7 @@ function gifPull(){
         console.log(response);
 
         console.log(giphyURL);
+        
         //displays the results from giphy server
         gifResults = response.data;
         //empties old gif entries
@@ -100,11 +108,12 @@ function gifPull(){
 
     }); //Ends AJAX
 }
+
 // Use document on click function to apply function for elements AFTER the page has loaded
 $(document).on('click' , gifPull);
 // ANIMATE GIFS
 
-function animate(){
+function gifAnimate(){
     var state = $(this).attr('data-state');
 
     //To return a string
@@ -124,6 +133,6 @@ function animate(){
     }
 };
 //document.ready 
-$(document).on('click', '.gifs-image', animate);
+$(document).on('click', '.gifs-image', gifAnimate);
 
 });
